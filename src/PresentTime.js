@@ -16,10 +16,32 @@ class PresentTime extends Component {
           presentTime: minutesSinceStartOfDay,
           presentTimeLocation: presentTimeLocation
         }
-        setInterval(this.tick, 60000)
+        
+    }
+
+    componentDidUpdate() {
+      if(this.timer){
+        clearInterval(this.timer);
+      }
+      if(this.props.shouldDisplay){
+        this.timer = setInterval(this.tick, 60000);
+      } 
+    }
+
+    componentDidMount() {
+      if(this.props.shouldDisplay){
+        this.timer = setInterval(this.tick, 60000);
+      }
+    }
+
+    componentWillUnmount() {
+      if(this.timer){
+        clearInterval(this.timer);
+      }
     }
 
     tick = () => {
+      console.log('Mounted');
       let mmtMidnight = moment().clone().startOf('day');
       let minutesSinceStartOfDay = moment().diff(mmtMidnight, 'minutes');
       let ptime = minutesSinceStartOfDay <= 1440 ? minutesSinceStartOfDay : 0; 

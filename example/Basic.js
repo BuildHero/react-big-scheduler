@@ -13,7 +13,7 @@ class Basic extends Component{
     constructor(props){
         super(props);
 
-        let schedulerData = new SchedulerData(new moment('2017-12-18').format(DATE_FORMAT), ViewTypes.Day, false, false, {
+        let schedulerData = new SchedulerData(new moment().format(DATE_FORMAT), ViewTypes.Day, false, false, {
             minuteStep: 15,
             eventItemHeight: 44,
             eventItemLineHeight: 48,
