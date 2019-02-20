@@ -48,6 +48,7 @@ import ViewTypes from './ViewTypes'
 import CellUnits from './CellUnits'
 import SummaryPos from './SummaryPos'
 import SchedulerData from './SchedulerData'
+import PresentTime from './PresentTime'
 import DemoData from './DemoData'
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -251,12 +252,15 @@ class Scheduler extends Component {
                             </div>
                             <div style={schedulerContentStyle} ref={this.schedulerContentRef} onMouseOver={this.onSchedulerContentMouseOver} onMouseOut={this.onSchedulerContentMouseOut} onScroll={this.onSchedulerContentScroll} >
                                 <div style={{width: schedulerWidth, height: contentHeight}}>
-                                    <div className="scheduler-content">
-                                        <table className="scheduler-content-table" >
-                                            <tbody>
-                                                {resourceEventsList}
-                                            </tbody>
-                                        </table>
+                                    <div className="scheduler-content" style={{display: 'inline-block'}}>
+                                        <PresentTime shouldDisplay={config.showPresentTime && viewType === ViewTypes.Day} color={config.presentTimeColor} cellWidth={config.dayCellWidth} minuteStep={config.minuteStep}>
+                                            <table className="scheduler-content-table" >
+                                                <tbody>
+                                                    {resourceEventsList}
+                                                </tbody>
+                                            </table>
+                                        </PresentTime>
+
                                     </div>
                                     <div className="scheduler-bg">
                                         <table className="scheduler-bg-table" style={{width: schedulerWidth}} ref={this.schedulerContentBgTableRef} >
@@ -318,6 +322,7 @@ class Scheduler extends Component {
                 {tbodyContent}
                 </tbody>
             </table>
+            
         )
     }
 

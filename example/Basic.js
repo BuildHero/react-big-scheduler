@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {PropTypes} from 'prop-types' 
-//import moment from 'moment'
+import moment from 'moment'
 //import 'moment/locale/zh-cn';
 import 'antd/lib/style/index.less';     //Add this code for locally example
 import Scheduler, {SchedulerData, ViewTypes, DATE_FORMAT, DemoData} from '../src/index'
@@ -13,8 +13,14 @@ class Basic extends Component{
     constructor(props){
         super(props);
 
-        //let schedulerData = new SchedulerData(new moment("2017-12-18").format(DATE_FORMAT), ViewTypes.Week);
-        let schedulerData = new SchedulerData('2017-12-18', ViewTypes.Week);
+        let schedulerData = new SchedulerData(new moment('2017-12-18').format(DATE_FORMAT), ViewTypes.Day, false, false, {
+            minuteStep: 15,
+            eventItemHeight: 44,
+            eventItemLineHeight: 48,
+            nonAgendaSlotMinHeight: 0,
+            dayCellWidth: 20
+        });
+        // let schedulerData = new SchedulerData('2017-12-18', ViewTypes.Day);
         schedulerData.localeMoment.locale('en');
         schedulerData.setResources(DemoData.resources);
         schedulerData.setEvents(DemoData.events);

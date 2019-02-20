@@ -39,8 +39,8 @@ export default {
     defaultEventBgColor: '#80C5F6',
     selectedAreaColor: '#7EC2F3',
     nonWorkingTimeHeadColor: '#999999',
-    nonWorkingTimeHeadBgColor: '#fff0f6',
-    nonWorkingTimeBodyBgColor: '#fff0f6',
+    nonWorkingTimeHeadBgColor: '#ffffff',
+    nonWorkingTimeBodyBgColor: '#ffffff',
     summaryColor: '#666',
     summaryPos: SummaryPos.TopRight,
 
@@ -67,6 +67,8 @@ export default {
     nonAgendaOtherCellHeaderFormat: 'ddd M/D',
 
     minuteStep: 30,
+    showPresentTime: true,
+    presentTimeColor: '#2dce89',
 
     views: [
         {viewName: 'Day', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false},
