@@ -41,7 +41,6 @@ class PresentTime extends Component {
     }
 
     tick = () => {
-      console.log('Mounted');
       let mmtMidnight = moment().clone().startOf('day');
       let minutesSinceStartOfDay = moment().diff(mmtMidnight, 'minutes');
       let ptime = minutesSinceStartOfDay <= 1440 ? minutesSinceStartOfDay : 0; 
