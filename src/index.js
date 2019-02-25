@@ -214,6 +214,7 @@ class Scheduler extends Component {
             }
 
             let resourceName = schedulerData.isEventPerspective ? config.taskName : config.resourceName;
+            
             tbodyContent = (
                 <tr>
                     <td style={{width: resourceTableWidth, verticalAlign: 'top'}}>
@@ -278,35 +279,39 @@ class Scheduler extends Component {
         let popover = <div className="popover-calendar"><Calendar fullscreen={false} onSelect={this.onSelect}/></div>;
         let schedulerHeader = <div />;
         if(config.headerEnabled) {
-            schedulerHeader = (
-                <Row type="flex" align="middle" justify="space-between" style={{marginBottom: '24px'}}>
-                    {leftCustomHeader}
-                    <Col>
-                        <div className='header2-text'>
-                            <Icon type="left" style={{marginRight: "8px"}} className="icon-nav"
-                                    onClick={this.goBack}/>
-                            {
-                            calendarPopoverEnabled
-                                ?
-                                <Popover content={popover} placement="bottom" trigger="click"
-                                        visible={this.state.visible}
-                                        onVisibleChange={this.handleVisibleChange}>
-                                <span className={'header2-text-label'} style={{cursor: 'pointer'}}>{dateLabel}</span>
-                                </Popover>
-                                : <span className={'header2-text-label'}>{dateLabel}</span>
-                            }
-                            <Icon type="right" style={{marginLeft: "8px"}} className="icon-nav"
-                                    onClick={this.goNext}/>
-                        </div>
-                    </Col>
-                    <Col>
-                        <RadioGroup defaultValue={defaultValue} size="default" onChange={this.onViewChange}>
-                            {radioButtonList}
-                        </RadioGroup>
-                    </Col>
-                    {rightCustomHeader}
-                </Row>
-            );
+            if (config.headerTemplate) {
+                schedulerHeader = config.headerTemplate;
+            } else {
+                schedulerHeader = (
+                    <Row type="flex" align="middle" justify="space-between" style={{marginBottom: '24px'}}>
+                        {leftCustomHeader}
+                        <Col>
+                            <div className='header2-text'>
+                                <Icon type="left" style={{marginRight: "8px"}} className="icon-nav"
+                                        onClick={this.goBack}/>
+                                {
+                                calendarPopoverEnabled
+                                    ?
+                                    <Popover content={popover} placement="bottom" trigger="click"
+                                            visible={this.state.visible}
+                                            onVisibleChange={this.handleVisibleChange}>
+                                    <span className={'header2-text-label'} style={{cursor: 'pointer'}}>{dateLabel}</span>
+                                    </Popover>
+                                    : <span className={'header2-text-label'}>{dateLabel}</span>
+                                }
+                                <Icon type="right" style={{marginLeft: "8px"}} className="icon-nav"
+                                        onClick={this.goNext}/>
+                            </div>
+                        </Col>
+                        <Col>
+                            <RadioGroup defaultValue={defaultValue} size="default" onChange={this.onViewChange}>
+                                {radioButtonList}
+                            </RadioGroup>
+                        </Col>
+                        {rightCustomHeader}
+                    </Row>
+                );
+            }
         }
 
         return (
