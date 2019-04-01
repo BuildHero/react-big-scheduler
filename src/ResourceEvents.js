@@ -252,7 +252,8 @@ class ResourceEvents extends Component {
                 }
             }
         });
-        const bgColor = resourceEvents.off ? '#fafafa' : 'transparent';
+        const res = schedulerData.resources.find(el => el.id === resourceEvents.slotId)
+        const bgColor = res.off ? '#fafafa' : 'transparent';
         return (
             <tr style={{backgroundColor: bgColor}}>
                 <td style={{width: rowWidth}}>
