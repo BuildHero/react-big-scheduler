@@ -252,9 +252,9 @@ class ResourceEvents extends Component {
                 }
             }
         });
-
+        const bgColor = resourceEvents.off ? '#fafafa' : 'transparent';
         return (
-            <tr>
+            <tr style={{backgroundColor: bgColor}}>
                 <td style={{width: rowWidth}}>
                     {
                         connectDropTarget(
