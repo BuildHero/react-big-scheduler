@@ -8,6 +8,7 @@ import Nav from './Nav'
 import Tips from './Tips'
 import ViewSrcCode from './ViewSrcCode'
 import withDragDropContext from './withDnDContext'
+import './test.css';
 
 class Basic extends Component{
     constructor(props){
@@ -18,7 +19,8 @@ class Basic extends Component{
             eventItemHeight: 44,
             eventItemLineHeight: 48,
             nonAgendaSlotMinHeight: 0,
-            dayCellWidth: 20
+            dayCellWidth: 20,
+            schedulerMaxHeight: 300
         });
         // let schedulerData = new SchedulerData('2017-12-18', ViewTypes.Day);
         schedulerData.localeMoment.locale('en');
@@ -41,7 +43,7 @@ class Basic extends Component{
                                nextClick={this.nextClick}
                                onSelectDate={this.onSelectDate}
                                onViewChange={this.onViewChange}
-                               eventItemClick={this.eventClicked}
+                            //    eventItemClick={this.eventClicked}
                                viewEventClick={this.ops1}
                                viewEventText="Ops 1"
                                viewEvent2Text="Ops 2"
@@ -54,11 +56,61 @@ class Basic extends Component{
                                onScrollRight={this.onScrollRight}
                                onScrollTop={this.onScrollTop}
                                onScrollBottom={this.onScrollBottom}
+                               eventItemContextMenuResolver={this.eventItemContextMenuResolver}
                     />
                 </div>
                 <Tips />
             </div>
         )
+    }
+
+    eventItemContextMenuResolver = (schedulerData, eventItem) => {
+        let menuItems = []; 
+        menuItems.push({
+            id: "option1",
+            label: "Copy",
+            onClick: data => {
+                console.log(data);
+                alert('Copy clicked')
+            },
+            data: eventItem
+        });
+        menuItems.push({
+            id: "divider1",
+            divider: true
+        })
+        menuItems.push({
+            id: "option2",
+            label: "Remove tech",
+            onClick: eventItem => {
+                alert(`Remove tech clicked ${eventItem.resourceId}`)
+            },
+            data: eventItem
+        });
+        return {
+            hideOnLeave: true, 
+            onShow: () => {eventItem.showPopover = false},
+            onHide: () => {eventItem.showPopover = true},
+            style: {
+                zIndex: 1000,
+                width: '240px',
+                padding: '16px',
+                color: '#adadad',
+                borderRadius: '4px',
+                margin: '-12px 0 0 -15px',
+                boxShadow:
+                '0 1px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 3px -2px rgba(0, 0, 0, 0.12), 0 3px 4px 0 rgba(0, 0, 0, 0.14)',
+                backgroundColor: '#fff',
+                fontFamily: ["'Arial'", 'sans-serif'].join(','),
+                fontSize: '14px',
+                fontWeight: 'normal',
+                fontStyle: 'normal',
+                fontStretch: 'normal',
+                lineHeight: 1.29,
+                letterSpacing: 'normal'
+            }, 
+            menuItems: menuItems
+        };
     }
 
     prevClick = (schedulerData)=> {
@@ -94,19 +146,19 @@ class Basic extends Component{
     }
 
     eventClicked = (schedulerData, event) => {
-        alert(`You just clicked an event: {id: ${event.id}, title: ${event.title}}`);
+        // alert(`You just clicked an event: {id: ${event.id}, title: ${event.title}}`);
     };
 
     ops1 = (schedulerData, event) => {
-        alert(`You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`);
+        // alert(`You just executed ops1 to event: {id: ${event.id}, title: ${event.title}}`);
     };
 
     ops2 = (schedulerData, event) => {
-        alert(`You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`);
+        // alert(`You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`);
     };
 
     newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
-        if(confirm(`Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`)){
+        // if(confirm(`Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`)){
 
             let newFreshId = 0;
             schedulerData.events.forEach((item) => {
@@ -126,7 +178,7 @@ class Basic extends Component{
             this.setState({
                 viewModel: schedulerData
             })
-        }
+        // s}
     }
 
     updateEventStart = (schedulerData, event, newStart) => {

@@ -118,6 +118,7 @@ class Scheduler extends Component {
         viewEvent2Text: PropTypes.string,
         conflictOccurred: PropTypes.func,
         eventItemTemplateResolver: PropTypes.func,
+        eventItemContextMenuResolver: PropTypes.func,
         dndSources: PropTypes.array,
         slotClickedFunc: PropTypes.func,
         slotItemTemplateResolver: PropTypes.func,
@@ -159,7 +160,7 @@ class Scheduler extends Component {
 
     render() {
         const { schedulerData, leftCustomHeader, rightCustomHeader } = this.props;
-        const { renderData, viewType, showAgenda, isEventPerspective, config } = schedulerData;
+        const { renderData, viewType, showAgenda, isEventPerspective, config, localeMoment } = schedulerData;
         const width = schedulerData.getSchedulerWidth();
         const calendarPopoverEnabled = config.calendarPopoverEnabled;
 
@@ -254,7 +255,7 @@ class Scheduler extends Component {
                             <div style={schedulerContentStyle} ref={this.schedulerContentRef} onMouseOver={this.onSchedulerContentMouseOver} onMouseOut={this.onSchedulerContentMouseOut} onScroll={this.onSchedulerContentScroll} >
                                 <div style={{width: schedulerWidth, height: contentHeight}}>
                                     <div className="scheduler-content" style={{display: 'inline-block'}}>
-                                        <PresentTime shouldDisplay={config.showPresentTime && viewType === ViewTypes.Day} color={config.presentTimeColor} cellWidth={config.dayCellWidth} minuteStep={config.minuteStep}>
+                                        <PresentTime shouldDisplay={config.showPresentTime && viewType === ViewTypes.Day && schedulerData.startDate === localeMoment().format(DATE_FORMAT)} color={config.presentTimeColor} cellWidth={config.dayCellWidth} minuteStep={config.minuteStep}>
                                             <table className="scheduler-content-table" >
                                                 <tbody>
                                                     {resourceEventsList}

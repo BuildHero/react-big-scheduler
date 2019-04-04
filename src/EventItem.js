@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {PropTypes} from 'prop-types'
 import Popover from 'antd/lib/popover'
 import 'antd/lib/popover/style/index.css'
+import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu';
 import EventItemPopover from './EventItemPopover'
 import {CellUnits, DATETIME_FORMAT} from './index'
 import {DnDTypes} from './DnDTypes'
@@ -15,9 +16,11 @@ class EventItem extends Component {
             left: left,
             top: top,
             width: width,
+            hidePopover: false
         };
         this.startResizer = null;
         this.endResizer = null;
+        this.hidePopover = false
     }
 
     static propTypes = {
@@ -45,14 +48,15 @@ class EventItem extends Component {
         viewEvent2Text: PropTypes.string,
         conflictOccurred: PropTypes.func,
         eventItemTemplateResolver: PropTypes.func,
+        eventItemContextMenu: PropTypes.func
     }
 
     componentWillReceiveProps(np) {
-        const {left, top, width} = np;
+        const {left, top, width, eventItem} = np;
         this.setState({
             left: left,
             top: top,
-            width: width,
+            width: width
         });
 
         this.subscribeResizeEvent(np);
@@ -344,9 +348,10 @@ class EventItem extends Component {
     }
 
     render() {
-        const {eventItem, isStart, isEnd, isInPopover, eventItemClick, schedulerData, isDragging, connectDragSource, connectDragPreview, eventItemTemplateResolver} = this.props;
+        const {eventItem, isStart, isEnd, isInPopover, eventItemClick, schedulerData, isDragging, connectDragSource, connectDragPreview, eventItemTemplateResolver, eventItemContextMenuResolver} = this.props;
         const {config, localeMoment} = schedulerData;
         const {left, width, top} = this.state;
+
         let roundCls = isStart ? (isEnd ? 'round-all' : 'round-head') : (isEnd ? 'round-tail' : 'round-none');
         let bgColor = config.defaultEventBgColor;
         if (!!eventItem.bgColor)
@@ -380,22 +385,95 @@ class EventItem extends Component {
         );
         if(eventItemTemplateResolver != undefined)
             eventItemTemplate = eventItemTemplateResolver(schedulerData, eventItem, bgColor, isStart, isEnd, 'event-item', config.eventItemHeight, undefined);
+        
 
-        let a = <a className="timeline-event" style={{left: left, width: width, top: top}} onClick={() => { if(!!eventItemClick) eventItemClick(schedulerData, eventItem);}}>
-            {eventItemTemplate}
-            {startResizeDiv}
-            {endResizeDiv}
+        let eventItemContextMenu = (
+            <ContextMenu 
+                id="eventitem_identifier"
+                onShow={() => {
+                    this.setState({hidePopover: true});
+                }}
+                onHide={() => {
+                    this.setState({hidePopover: false});
+                }}
+            >
+                <MenuItem>Copy</MenuItem>
+                <MenuItem divider />
+                <MenuItem>
+                Remove tech from visit
+                </MenuItem>
+            </ContextMenu>
+        );
+        if(eventItemContextMenuResolver !== undefined) {
+            const contextmenu = eventItemContextMenuResolver(schedulerData, eventItem);
+            const {hideOnLeave, className, onHide, onShow, style} = contextmenu;
+            const props = {
+                hideOnLeave,
+                className,
+                style
+            }
+            const {menuItems} = contextmenu;
+            eventItemContextMenu = (
+                <ContextMenu 
+                    id="eventitem_identifier"
+                    onShow={e=>{
+                        if(onShow) onShow();
+                        this.setState({hidePopover: true});
+                    }}
+                    onHide={e=>{
+
+                        if(onHide) onHide();
+                        this.setState({hidePopover: false});
+                    }}
+                    {...props}
+                >
+                {
+                    menuItems.map(menuItem => {
+                        const submenus = menuItems.submenus;
+                        const menuItemProps = {...menuItem};
+                        delete menuItemProps.label
+                        return (
+                            <MenuItem key={menuItemProps.id} {...menuItemProps}>
+                                {menuItem.label}
+                            </MenuItem>
+                        );
+                    })
+                }
+                </ContextMenu>
+            );
+                
+
+        }
+
+        let a = <a className="timeline-event" style={{left: left, width: width, top: top}} onClick={() => { 
+            if(!!eventItemClick) {
+                eventItemClick(schedulerData, eventItem);
+            }
+        }}>
+            <ContextMenuTrigger id="eventitem_identifier">
+                {eventItemTemplate}
+                {startResizeDiv}
+                {endResizeDiv}
+            </ContextMenuTrigger>
+            {eventItemContextMenu}
         </a>;
 
         return (
-            isDragging ? null : ( schedulerData._isResizing() || config.eventItemPopoverEnabled == false || eventItem.showPopover == false ?
-                    <div>
+            isDragging 
+            ? null 
+            : ( 
+                schedulerData._isResizing() || 
+                config.eventItemPopoverEnabled == false || 
+                eventItem.showPopover == false ||
+                this.state.hidePopover === true
+                ? (<div>
                         {
                             connectDragPreview(
                                 connectDragSource(a)
                             )
                         }
-                    </div> :
+                    </div>) 
+                : (
                     <Popover placement="bottomLeft" content={content} trigger="hover">
                         {
                             connectDragPreview(
@@ -403,6 +481,7 @@ class EventItem extends Component {
                             )
                         }
                     </Popover>
+                    )
             )
         );
     }
