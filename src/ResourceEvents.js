@@ -132,7 +132,7 @@ class ResourceEvents extends Component {
             leftIndex: 0,
             left: 0,
             rightIndex: 0,
-            width: 0,
+            // width: 0,
             isSelecting: false
         });
 
