@@ -24,6 +24,10 @@ class Basic extends Component{
         });
         // let schedulerData = new SchedulerData('2017-12-18', ViewTypes.Day);
         schedulerData.localeMoment.locale('en');
+        schedulerData.behaviors.getScrollSpecialMomentFunc = (schedulerData, startMoment) => {
+            console.log('here');
+            return moment(startMoment).add(7, 'hours');
+        }
         schedulerData.setResources(DemoData.resources);
         schedulerData.setEvents(DemoData.events);
         this.state = {

@@ -186,13 +186,13 @@ class ResourceEvents extends Component {
 
         let eventList = [];
         resourceEvents.headerItems.forEach((headerItem, index) => {
-
+            if(headerItem.addMore > 0) headerItem.addMore = 0;
             if (headerItem.count > 0 || headerItem.summary != undefined) {
 
                 let isTop = config.summaryPos === SummaryPos.TopRight || config.summaryPos === SummaryPos.Top || config.summaryPos === SummaryPos.TopLeft;
                 let marginTop = resourceEvents.hasSummary && isTop ? 1 + config.eventItemLineHeight : 1;
                 // TRY TO DISABLE ADD MORE FROM HERE
-                if(headerItem.addMore > 0) headerItem.addMore = 0;
+                
                 let renderEventsMaxIndex = headerItem.addMore === 0 ? cellMaxEvents : headerItem.addMoreIndex;
                
 
@@ -229,6 +229,7 @@ class ResourceEvents extends Component {
                 });
 
                 if(headerItem.addMore > 0) {
+                    console.log('on add more');
                     let left = index*cellWidth + (index > 0 ? 2 : 3);
                     let width = cellWidth - (index > 0 ? 5 : 6);
                     let top = marginTop + headerItem.addMoreIndex*config.eventItemLineHeight;
