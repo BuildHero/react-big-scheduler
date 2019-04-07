@@ -191,7 +191,10 @@ class ResourceEvents extends Component {
 
                 let isTop = config.summaryPos === SummaryPos.TopRight || config.summaryPos === SummaryPos.Top || config.summaryPos === SummaryPos.TopLeft;
                 let marginTop = resourceEvents.hasSummary && isTop ? 1 + config.eventItemLineHeight : 1;
+                // TRY TO DISABLE ADD MORE FROM HERE
+                if(headerItem.addMore > 0) headerItem.addMore = 0;
                 let renderEventsMaxIndex = headerItem.addMore === 0 ? cellMaxEvents : headerItem.addMoreIndex;
+               
 
                 headerItem.events.forEach((evt, idx) => {
                     if(idx < renderEventsMaxIndex && evt !== undefined && evt.render) {
