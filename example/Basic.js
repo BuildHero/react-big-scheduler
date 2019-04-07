@@ -89,8 +89,8 @@ class Basic extends Component{
         });
         return {
             hideOnLeave: true, 
-            onShow: () => {eventItem.showPopover = false},
-            onHide: () => {eventItem.showPopover = true},
+            onShow: (e) => {console.log('event show')},
+            onHide: (e) => {console.log('event hide')},
             style: {
                 zIndex: 1000,
                 width: '240px',
