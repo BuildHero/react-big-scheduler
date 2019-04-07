@@ -186,6 +186,7 @@ class ResourceEvents extends Component {
 
         let eventList = [];
         resourceEvents.headerItems.forEach((headerItem, index) => {
+            // for add more comment the following line
             if(headerItem.addMore > 0) headerItem.addMore = 0;
             if (headerItem.count > 0 || headerItem.summary != undefined) {
 
@@ -197,6 +198,7 @@ class ResourceEvents extends Component {
                
 
                 headerItem.events.forEach((evt, idx) => {
+                    // for add more uncomment the following line
                     // if(idx < renderEventsMaxIndex && evt !== undefined && evt.render) {
                     if(evt !== undefined && evt.render) {
                         let durationStart = localeMoment(startDate);
@@ -210,7 +212,9 @@ class ResourceEvents extends Component {
                         let isStart = eventStart >= durationStart;
                         let isEnd = eventEnd <= durationEnd;
                         let left = index*cellWidth + (index > 0 ? 2 : 3);
-                        let width = (evt.span * cellWidth - (index > 0 ? 5 : 6)) > 0 ? (evt.span * cellWidth - (index > 0 ? 5 : 6)) : 0;
+                        //also add mores
+                        // let width = (evt.span * cellWidth - (index > 0 ? 5 : 6)) > 0 ? (evt.span * cellWidth - (index > 0 ? 5 : 6)) : 0;
+                        let width =  evt.span * cellWidth - (index > 0 ? 5 : 6);
                         let top = marginTop; // + idx*config.eventItemLineHeight;
                         let eventItem = <DnDEventItem
                                                    {...this.props}
