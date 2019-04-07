@@ -835,7 +835,7 @@ export default class SchedulerData {
                 while (index < this.getCellMaxEvents() - 1) {
                     if(headerItem.events[index] !== undefined) {
                         renderItemsCount++;
-                        addMoreIndex = index + 1;
+                        // addMoreIndex = index + 1;
                     }
 
                     index++;
@@ -843,14 +843,14 @@ export default class SchedulerData {
 
                 if(headerItem.events[index] !== undefined) {
                     if(renderItemsCount + 1 < headerItem.count) {
-                        headerItem.addMore = headerItem.count - renderItemsCount;
-                        headerItem.addMoreIndex = addMoreIndex;
+                        // headerItem.addMore = headerItem.count - renderItemsCount;
+                        // headerItem.addMoreIndex = addMoreIndex;
                     }
                 }
                 else {
                     if(renderItemsCount < headerItem.count) {
-                        headerItem.addMore = headerItem.count - renderItemsCount;
-                        headerItem.addMoreIndex = addMoreIndex;
+                        // headerItem.addMore = headerItem.count - renderItemsCount;
+                        // headerItem.addMoreIndex = addMoreIndex;
                     }
                 }
 
