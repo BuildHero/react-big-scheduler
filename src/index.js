@@ -74,10 +74,10 @@ class Scheduler extends Component {
             visible: false,
             dndContext: dndContext,
             contentHeight: schedulerData.getSchedulerContentDesiredHeight(),
-            contentScrollbarHeight: 17,
-            contentScrollbarWidth: 17,
-            resourceScrollbarHeight: 17,
-            resourceScrollbarWidth: 17,
+            contentScrollbarHeight: 37,
+            contentScrollbarWidth: 37,
+            resourceScrollbarHeight: 37,
+            resourceScrollbarWidth: 37,
             scrollLeft: 0,
             scrollTop: 0,
             documentWidth: document.documentElement.clientWidth,
@@ -334,10 +334,10 @@ class Scheduler extends Component {
 
     resolveScrollbarSize = () => {
         const { schedulerData } = this.props;
-        let contentScrollbarHeight = 17, 
-            contentScrollbarWidth = 17, 
-            resourceScrollbarHeight = 17,
-            resourceScrollbarWidth = 17,
+        let contentScrollbarHeight = 37, 
+            contentScrollbarWidth = 37, 
+            resourceScrollbarHeight = 37,
+            resourceScrollbarWidth = 37,
             contentHeight = schedulerData.getSchedulerContentDesiredHeight();
         if (!!this.schedulerContent) {
             contentScrollbarHeight = this.schedulerContent.offsetHeight - this.schedulerContent.clientHeight;
