@@ -229,7 +229,6 @@ class ResourceEvents extends Component {
                 });
 
                 if(headerItem.addMore > 0) {
-                    console.log('on add more');
                     let left = index*cellWidth + (index > 0 ? 2 : 3);
                     let width = cellWidth - (index > 0 ? 5 : 6);
                     let top = marginTop + headerItem.addMoreIndex*config.eventItemLineHeight;
