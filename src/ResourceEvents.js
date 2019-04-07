@@ -197,7 +197,8 @@ class ResourceEvents extends Component {
                
 
                 headerItem.events.forEach((evt, idx) => {
-                    if(idx < renderEventsMaxIndex && evt !== undefined && evt.render) {
+                    // if(idx < renderEventsMaxIndex && evt !== undefined && evt.render) {
+                    if(evt !== undefined && evt.render) {
                         let durationStart = localeMoment(startDate);
                         let durationEnd = localeMoment(endDate).add(1, 'days');
                         if(cellUnit === CellUnits.Hour){
