@@ -832,14 +832,14 @@ export default class SchedulerData {
                 maxRowsCount = headerItem.count > maxRowsCount ? headerItem.count : maxRowsCount;
 
                 let renderItemsCount = 0, addMoreIndex = 0, index = 0;
-                while (index < this.getCellMaxEvents() - 1) {
-                    if(headerItem.events[index] !== undefined) {
-                        renderItemsCount++;
-                        // addMoreIndex = index + 1;
-                    }
+                // while (index < this.getCellMaxEvents() - 1) {
+                //     if(headerItem.events[index] !== undefined) {
+                //         renderItemsCount++;
+                //         // addMoreIndex = index + 1;
+                //     }
 
-                    index++;
-                }
+                //     index++;
+                // }
 
                 // if(headerItem.events[index] !== undefined) {
                 //     if(renderItemsCount + 1 < headerItem.count) {
