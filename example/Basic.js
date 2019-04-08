@@ -15,6 +15,7 @@ class Basic extends Component{
         super(props);
 
         let schedulerData = new SchedulerData(new moment().format(DATE_FORMAT), ViewTypes.Day, false, false, {
+            dayMaxEvents: 1,
             minuteStep: 15,
             eventItemHeight: 44,
             eventItemLineHeight: 48,

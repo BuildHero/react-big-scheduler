@@ -841,18 +841,18 @@ export default class SchedulerData {
                     index++;
                 }
 
-                if(headerItem.events[index] !== undefined) {
-                    if(renderItemsCount + 1 < headerItem.count) {
-                        headerItem.addMore = headerItem.count - renderItemsCount;
-                        headerItem.addMoreIndex = addMoreIndex;
-                    }
-                }
-                else {
-                    if(renderItemsCount < headerItem.count) {
-                        headerItem.addMore = headerItem.count - renderItemsCount;
-                        headerItem.addMoreIndex = addMoreIndex;
-                    }
-                }
+                // if(headerItem.events[index] !== undefined) {
+                //     if(renderItemsCount + 1 < headerItem.count) {
+                //         headerItem.addMore = headerItem.count - renderItemsCount;
+                //         headerItem.addMoreIndex = addMoreIndex;
+                //     }
+                // }
+                // else {
+                //     if(renderItemsCount < headerItem.count) {
+                //         headerItem.addMore = headerItem.count - renderItemsCount;
+                //         headerItem.addMoreIndex = addMoreIndex;
+                //     }
+                // }
 
                 if(this.behaviors.getSummaryFunc !== undefined){
                     let events = [];
