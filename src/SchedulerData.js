@@ -804,14 +804,21 @@ export default class SchedulerData {
                     if(headerEnd > eventStart && headerStart < eventEnd) {
                         header.count = header.count + 1;
 
-                        if(pos === -1)
-                        {
-                            let tmp = 0;
-                            while (header.events[tmp] !== undefined)
-                                tmp++;
+                        // if(pos === -1)
+                        // {
+                        //     let tmp = 0;
+                        //     while (header.events[tmp] !== undefined)
+                        //         tmp++;
 
-                            pos = tmp;
+                        //     pos = tmp;
+                        // }
+                        let tmp = pos;
+                        if (tmp === -1) tmp = 0;
+                        while (header.events[tmp] !== undefined) {
+                        tmp++;
                         }
+                        pos = tmp;
+                        
                         let render = headerStart <= eventStart || index === 0;
                         if(render === false){
                             let previousHeader = resourceEvents.headerItems[index - 1];
