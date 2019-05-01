@@ -450,14 +450,11 @@ class EventItem extends Component {
                 eventItemClick(schedulerData, eventItem);
             }
         }}>
-            {/* <ContextMenuTrigger id="eventitem_identifier"> */}
                 {eventItemTemplate}
                 {startResizeDiv}
                 {endResizeDiv}
-            {/* </ContextMenuTrigger> */}
             
         </a>;
-        // {eventItemContextMenu}</div>;
 
         return (
             isDragging 
