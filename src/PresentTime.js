@@ -7,7 +7,7 @@ class PresentTime extends Component {
         super(props);
         this.cellWidth = this.props.cellWidth;
         this.minuteStep = this.props.minuteStep;
-
+        this.mounted = true;
         let mmtMidnight = moment().clone().startOf('day');
         let minutesSinceStartOfDay = moment().diff(mmtMidnight, 'minutes');
         this.minuteWidth = this.cellWidth / 15;
@@ -23,18 +23,19 @@ class PresentTime extends Component {
       if(this.timer){
         clearInterval(this.timer);
       }
-      if(this.props.shouldDisplay){
+      if(this.props.shouldDisplay && this.mounted){
         this.timer = setInterval(this.tick, 60000);
       } 
     }
 
     componentDidMount() {
-      if(this.props.shouldDisplay){
+      if(this.props.shouldDisplay && this.mounted){
         this.timer = setInterval(this.tick, 60000);
       }
     }
 
     componentWillUnmount() {
+      this.mounted = false;
       if(this.timer){
         clearInterval(this.timer);
       }
