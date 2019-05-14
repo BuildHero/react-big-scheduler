@@ -262,12 +262,13 @@ class ResourceEvents extends Component {
         });
         const res = schedulerData.resources.find(el => el.id === resourceEvents.slotId)
         const bgColor = res.off ? '#fafafa' : 'transparent';
+        let rowHeight = res.off ? resourceEvents.rowHeight - 5 : resourceEvents.rowHeight;
         return (
-            <tr style={{backgroundColor: bgColor}}>
+            <tr>
                 <td style={{width: rowWidth}}>
                     {
                         connectDropTarget(
-                            <div ref={this.eventContainerRef} className="event-container" style={{height: resourceEvents.rowHeight}}>
+                            <div ref={this.eventContainerRef} className="event-container" style={{height: rowHeight, backgroundColor: bgColor}}>
                                 {selectedArea}
                                 {eventList}
                             </div>
