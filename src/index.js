@@ -49,6 +49,7 @@ import CellUnits from './CellUnits'
 import SummaryPos from './SummaryPos'
 import SchedulerData from './SchedulerData'
 import PresentTime from './PresentTime'
+import PresentHour from './PresentHour'
 import DemoData from './DemoData'
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -246,9 +247,13 @@ class Scheduler extends Component {
                             <div style={{overflow: "hidden", borderBottom: "1px solid #e9e9e9", height: config.tableHeaderHeight}}>
                                 <div style={{overflowX: "scroll", overflowY: "hidden", margin: `0px 0px -${contentScrollbarHeight}px`}} ref={this.schedulerHeadRef} onMouseOver={this.onSchedulerHeadMouseOver} onMouseOut={this.onSchedulerHeadMouseOut} onScroll={this.onSchedulerHeadScroll}>
                                     <div style={{paddingRight: `${contentScrollbarWidth}px`, width: schedulerWidth + contentScrollbarWidth}}>
+                                    <div className="scheduler-content" style={{display: 'inline-block'}}>
+                                    <PresentHour shouldDisplay={config.showPresentTime && viewType === ViewTypes.Day && schedulerData.startDate === localeMoment().format(DATE_FORMAT)} color={config.presentTimeColor} cellWidth={config.dayCellWidth} minuteStep={config.minuteStep}>
                                         <table className="scheduler-bg-table">
                                             <HeaderView {...this.props}/>
                                         </table>
+                                        </PresentHour>
+                                    </div>
                                     </div>
                                 </div>
                             </div>

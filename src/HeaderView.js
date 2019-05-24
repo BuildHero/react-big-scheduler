@@ -15,6 +15,7 @@ class HeaderView extends Component {
 
     render() {
         const {schedulerData, nonAgendaCellHeaderTemplateResolver} = this.props;
+        const {shouldDisplay, color } = this.props;
         const {headers, cellUnit, config, localeMoment} = schedulerData;
         let headerHeight = schedulerData.getTableHeaderHeight();
         let cellWidth = schedulerData.getContentCellWidth();
@@ -28,7 +29,7 @@ class HeaderView extends Component {
                     let datetime = localeMoment(item.time);
                     const isCurrentTime = datetime.isSame(new Date(), 'hour');
 
-                    style = !!item.nonWorkingTime ? {width: cellWidth*minuteStepsInHour, color: config.nonWorkingTimeHeadColor, backgroundColor: config.nonWorkingTimeHeadBgColor} : {width: cellWidth*minuteStepsInHour};
+                    style = !!item.nonWorkingTime ? {width: cellWidth*minuteStepsInHour, color: config.nonWorkingTimeHeadColor, backgroundColor: config.nonWorkingTimeHeadBgColor, textAlign: 'left' } : {width: cellWidth*minuteStepsInHour,textAlign: 'left'};
 
                     if(index === headers.length - minuteStepsInHour)
                         style = !!item.nonWorkingTime ? {color: config.nonWorkingTimeHeadColor, backgroundColor: config.nonWorkingTimeHeadBgColor} : {};
@@ -46,7 +47,7 @@ class HeaderView extends Component {
 
                         element = (
                             <th key={item.time} className="header3-text" style={style}>
-                                <div>
+                                <div style={{marginTop: '-10px',marginLeft:(index !== 0?'-15px':'')}}>
                                     {pList}
                                 </div>
                             </th>
@@ -60,7 +61,7 @@ class HeaderView extends Component {
         else {
             headerList = headers.map((item, index) => {
                 let datetime = localeMoment(item.time);
-                style = !!item.nonWorkingTime ? {width: cellWidth, color: config.nonWorkingTimeHeadColor, backgroundColor: config.nonWorkingTimeHeadBgColor} : {width: cellWidth};
+                style = !!item.nonWorkingTime ? {width: cellWidth, color: config.nonWorkingTimeHeadColor, backgroundColor: config.nonWorkingTimeHeadBgColor,textAlign: 'left'} : {width: cellWidth,textAlign: 'left'};
                 if(index === headers.length - 1)
                     style = !!item.nonWorkingTime ? {color: config.nonWorkingTimeHeadColor, backgroundColor: config.nonWorkingTimeHeadBgColor} : {};
 
@@ -76,7 +77,7 @@ class HeaderView extends Component {
 
                 return (
                     <th key={item.time} className="header3-text" style={style}>
-                        <div>
+                        <div style={{marginTop: '-10px',marginLeft: (index !== 0?'-15px':'')}}>
                             {pList}
                         </div>
                     </th>
