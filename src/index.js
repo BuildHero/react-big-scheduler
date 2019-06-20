@@ -135,7 +135,7 @@ class Scheduler extends Component {
     }
 
     componentDidUpdate(props, state) {
-        // this.resolveScrollbarSize();
+        this.resolveScrollbarSize();
 
         const { schedulerData } = this.props;
         const { localeMoment, behaviors } = schedulerData;
