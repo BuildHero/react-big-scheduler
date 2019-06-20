@@ -131,7 +131,7 @@ class Scheduler extends Component {
     }
 
     componentDidMount(props, state){
-        this.resolveScrollbarSize();
+        this.resolveScrollbarSize(props, state);
     }
 
     componentDidUpdate(props, state) {
