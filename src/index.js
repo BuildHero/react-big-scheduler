@@ -338,14 +338,12 @@ class Scheduler extends Component {
     }
 
     resolveScrollbarSize = (props, state) => {
-        if(!props) props = this.props;
-        if(!state) state = this.state;
         const { schedulerData } = props;
         let contentScrollbarHeight = state.contentScrollbarHeight, 
             contentScrollbarWidth = state.contentScrollbarWidth, 
             resourceScrollbarHeight = state.resourceScrollbarHeight,
             resourceScrollbarWidth = state.resourceScrollbarWidth,
-            contentHeight = schedulerData.getSchedulerContentDesiredHeight();
+            contentHeight = schdedulerData ? schedulerData.getSchedulerContentDesiredHeight() : 0;
         if (!!this.schedulerContent) {
             contentScrollbarHeight = this.schedulerContent.offsetHeight - this.schedulerContent.clientHeight;
             contentScrollbarWidth = this.schedulerContent.offsetWidth - this.schedulerContent.clientWidth;
@@ -365,7 +363,7 @@ class Scheduler extends Component {
             tmpState = {...tmpState, contentScrollbarHeight: contentScrollbarHeight};
             needSet = true;
         }
-        if (contentScrollbarWidth != this.state.contentScrollbarWidth) {
+        if (contentScrollbarWidth < this.state.contentScrollbarWidth-1 || contentScrollbarWidth > this.state.contentScrollbarWidth+1) {
             console.log('contentScrollbarWidth');
             tmpState = {...tmpState, contentScrollbarWidth: contentScrollbarWidth};
             needSet = true;
@@ -382,7 +380,7 @@ class Scheduler extends Component {
             tmpState = {...tmpState, resourceScrollbarHeight: resourceScrollbarHeight};
             needSet = true;
         }
-        if (resourceScrollbarWidth != this.state.resourceScrollbarWidth) {
+        if (resourceScrollbarWidth < this.state.resourceScrollbarWidth - 1 || resourceScrollbarWidth > this.state.resourceScrollbarWidth + 1 ) {
             console.log('resourceScrollbarWidth');
             tmpState = {...tmpState, resourceScrollbarWidth: resourceScrollbarWidth};
             needSet = true;
