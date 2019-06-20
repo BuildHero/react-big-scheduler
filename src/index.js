@@ -359,27 +359,36 @@ class Scheduler extends Component {
         let tmpState = {};
         let needSet = false;
         if (contentScrollbarHeight != this.state.contentScrollbarHeight) {
+            console.log('contentScrollbarHeight');
             tmpState = {...tmpState, contentScrollbarHeight: contentScrollbarHeight};
             needSet = true;
         }
         if (contentScrollbarWidth != this.state.contentScrollbarWidth) {
+            console.log('contentScrollbarWidth');
             tmpState = {...tmpState, contentScrollbarWidth: contentScrollbarWidth};
             needSet = true;
         }
         if(contentHeight != this.state.contentHeight){
+            console.log('contentHeight');
+            console.log(contentheight);
+            console.log(this.state.contentHeight);
             tmpState = {...tmpState, contentHeight: contentHeight};
             needSet = true;
         }
         if (resourceScrollbarHeight != this.state.resourceScrollbarHeight) {
+            console.log('resourceScrollbarHeight');
             tmpState = {...tmpState, resourceScrollbarHeight: resourceScrollbarHeight};
             needSet = true;
         }
         if (resourceScrollbarWidth != this.state.resourceScrollbarWidth) {
+            console.log('resourceScrollbarWidth');
             tmpState = {...tmpState, resourceScrollbarWidth: resourceScrollbarWidth};
             needSet = true;
         }
-        if (needSet)
+        if (needSet){
+            console.log(tmpState);
             this.setState(tmpState);
+        }
     }
 
     schedulerHeadRef = (element) => {
