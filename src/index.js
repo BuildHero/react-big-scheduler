@@ -345,7 +345,7 @@ class Scheduler extends Component {
             contentScrollbarWidth = state.contentScrollbarWidth, 
             resourceScrollbarHeight = state.resourceScrollbarHeight,
             resourceScrollbarWidth = state.resourceScrollbarWidth,
-            contentHeight = schdedulerData ? schedulerData.getSchedulerContentDesiredHeight() : 0;
+            contentHeight = schedulerData ? schedulerData.getSchedulerContentDesiredHeight() : 0;
         if (!!this.schedulerContent) {
             contentScrollbarHeight = this.schedulerContent.offsetHeight - this.schedulerContent.clientHeight;
             contentScrollbarWidth = this.schedulerContent.offsetWidth - this.schedulerContent.clientWidth;
