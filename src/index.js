@@ -135,7 +135,7 @@ class Scheduler extends Component {
     }
 
     componentDidUpdate(props, state) {
-        this.resolveScrollbarSize();
+        this.resolveScrollbarSize(props, state);
 
         const { schedulerData } = this.props;
         const { localeMoment, behaviors } = schedulerData;
@@ -337,12 +337,12 @@ class Scheduler extends Component {
         )
     }
 
-    resolveScrollbarSize = () => {
-        const { schedulerData } = this.props;
-        let contentScrollbarHeight = 37, 
-            contentScrollbarWidth = 37, 
-            resourceScrollbarHeight = 37,
-            resourceScrollbarWidth = 37,
+    resolveScrollbarSize = (props, state) => {
+        const { schedulerData } = props;
+        let contentScrollbarHeight = state.contentScrollbarHeight, 
+            contentScrollbarWidth = state.contentScrollbarWidth, 
+            resourceScrollbarHeight = state.resourceScrollbarHeight,
+            resourceScrollbarWidth = state.resourceScrollbarWidth,
             contentHeight = schedulerData.getSchedulerContentDesiredHeight();
         if (!!this.schedulerContent) {
             contentScrollbarHeight = this.schedulerContent.offsetHeight - this.schedulerContent.clientHeight;
@@ -370,7 +370,7 @@ class Scheduler extends Component {
         }
         if(contentHeight != this.state.contentHeight){
             console.log('contentHeight');
-            console.log(contentheight);
+            console.log(contentHeight);
             console.log(this.state.contentHeight);
             tmpState = {...tmpState, contentHeight: contentHeight};
             needSet = true;
