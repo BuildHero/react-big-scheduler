@@ -360,35 +360,27 @@ class Scheduler extends Component {
 
         let tmpState = {};
         let needSet = false;
-        if (contentScrollbarHeight != this.state.contentScrollbarHeight) {
-            console.log('contentScrollbarHeight');
+        if (contentScrollbarHeight < this.state.contentScrollbarHeight - 1 || contentScrollbarHeight > this.state.contentScrollbarHeight + 1) {
             tmpState = {...tmpState, contentScrollbarHeight: contentScrollbarHeight};
             needSet = true;
         }
-        if (contentScrollbarWidth < this.state.contentScrollbarWidth-1 || contentScrollbarWidth > this.state.contentScrollbarWidth+1) {
-            console.log('contentScrollbarWidth');
+        if (contentScrollbarWidth < this.state.contentScrollbarWidth - 1 || contentScrollbarWidth > this.state.contentScrollbarWidth + 1) {
             tmpState = {...tmpState, contentScrollbarWidth: contentScrollbarWidth};
             needSet = true;
         }
         if(contentHeight != this.state.contentHeight){
-            console.log('contentHeight');
-            console.log(contentHeight);
-            console.log(this.state.contentHeight);
             tmpState = {...tmpState, contentHeight: contentHeight};
             needSet = true;
         }
-        if (resourceScrollbarHeight != this.state.resourceScrollbarHeight) {
-            console.log('resourceScrollbarHeight');
+        if (resourceScrollbarHeight < this.state.resourceScrollbarHeight - 1 || resourceScrollbarHeight > this.state.resourceScrollbarHeight + 1) {
             tmpState = {...tmpState, resourceScrollbarHeight: resourceScrollbarHeight};
             needSet = true;
         }
         if (resourceScrollbarWidth < this.state.resourceScrollbarWidth - 1 || resourceScrollbarWidth > this.state.resourceScrollbarWidth + 1 ) {
-            console.log('resourceScrollbarWidth');
             tmpState = {...tmpState, resourceScrollbarWidth: resourceScrollbarWidth};
             needSet = true;
         }
         if (needSet){
-            console.log(tmpState);
             this.setState(tmpState);
         }
     }
