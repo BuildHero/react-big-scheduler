@@ -766,15 +766,20 @@ export default class SchedulerData {
         let start = this.localeMoment(startTime),
             end = this.localeMoment(endTime),
             span = 0;
-
-        for(let header of headers) {
+        let hoursTillStart = start.hour();
+        if(hoursTillStart > 0) hoursTillStart -= 1;
+        const spansToIgnore = hoursTillStart * parseInt(60 / this.config.minuteStep);
+        // for(let header of headers) {
+        for(let i = spansToIgnore; i<headers.length; i++){
+            let header = headers[i];
             let spanStart = this.localeMoment(header.time),
             spanEnd = this.cellUnit === CellUnits.Hour ? this.localeMoment(header.time).add(this.config.minuteStep, 'minutes') 
                 : this.localeMoment(header.time).add(1, 'days');
             
-                if(spanStart < end && spanEnd > start) {
-                    span++;
-                }
+            if(spanStart < end && spanEnd > start) {
+                span++;
+            }
+            if(spanStart > end) break;
         }
 
         return span;
@@ -852,108 +857,112 @@ export default class SchedulerData {
     }
 
     _createRenderData(item = null, oldSlot=null) {
-        let initRenderData = this.initRenderData;
-        if(item !== null && initRenderData) {
-            //redraw the concerned event
-            // console.log('with item');
-            let resourceEventsList = initRenderData.filter(x => x.slotId === this._getEventSlotId(item));
-            if(oldSlot) {
-                // console.log('with Slot')
-                let oldResourceEventList = initRenderData.filter(x => x.slotId === oldSlot);
-                if(oldResourceEventList.length > 0){
-                    let oldResourceEvents = oldResourceEventList[0];
-                    let span = this._getSpan(item.start, item.end, this.headers);
-                    oldResourceEvents.headerItems.forEach((header, index) => {
-                        for(let i=0; i< header.events.length; i++){
-                            if(header.events[i] && header.events[i].eventItem.id === item.id){
-                                header.events[i] = this._createHeaderEvent(false, span, item);
-                            }
-                        }
-                    });
-                }
-            }
-            if(resourceEventsList.length > 0) {
-                let resourceEvents = resourceEventsList[0];
-                let span = this._getSpan(item.start, item.end, this.headers);
-                let eventStart = this.localeMoment(item.start), eventEnd = this.localeMoment(item.end);
-                let pos = -1;
-                for(let k=0; k< resourceEvents.headerItems.length; k++){
-                    let header = resourceEvents.headerItems[k];
-                    let index = k;
-                    for(let i=0; i< header.events.length; i++){
-                        if(header.events[i] && header.events[i].eventItem.id === item.id){
-                            header.events[i] = this._createHeaderEvent(false, span, item);
-                        }
-                    }
-                    let headerStart = this.localeMoment(header.start), headerEnd = this.localeMoment(header.end);
-                    if(headerEnd > eventStart && headerStart < eventEnd) {
-                        header.count = header.count + 1;
+        // let initRenderData = this.initRenderData;
+        // if(item !== null && initRenderData) {
+        //     //redraw the concerned event
+        //     // console.log('with item');
+        //     let resourceEventsList = initRenderData.filter(x => x.slotId === this._getEventSlotId(item));
+        //     if(oldSlot) {
+        //         // console.log('with Slot')
+        //         let oldResourceEventList = initRenderData.filter(x => x.slotId === oldSlot);
+        //         if(oldResourceEventList.length > 0){
+        //             let oldResourceEvents = oldResourceEventList[0];
+        //             let span = this._getSpan(item.start, item.end, this.headers);
+        //             oldResourceEvents.headerItems.forEach((header, index) => {
+        //                 for(let i=0; i< header.events.length; i++){
+        //                     if(header.events[i] && header.events[i].eventItem.id === item.id){
+        //                         header.events[i] = this._createHeaderEvent(false, span, item);
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     }
+        //     if(resourceEventsList.length > 0) {
+        //         let resourceEvents = resourceEventsList[0];
+        //         let span = this._getSpan(item.start, item.end, this.headers);
+        //         let eventStart = this.localeMoment(item.start), eventEnd = this.localeMoment(item.end);
+        //         let pos = -1;
+        //         for(let k=0; k< resourceEvents.headerItems.length; k++){
+        //             let header = resourceEvents.headerItems[k];
+        //             let index = k;
+        //             for(let i=0; i< header.events.length; i++){
+        //                 if(header.events[i] && header.events[i].eventItem.id === item.id){
+        //                     header.events[i] = this._createHeaderEvent(false, span, item);
+        //                 }
+        //             }
+        //             let headerStart = this.localeMoment(header.start), headerEnd = this.localeMoment(header.end);
+        //             if(headerEnd > eventStart && headerStart < eventEnd) {
+        //                 header.count = header.count + 1;
 
-                        let tmp = pos;
-                        if (tmp === -1) tmp = 0;
-                        while (header.events[tmp] !== undefined) {
-                            tmp++;
-                        }
-                        pos = tmp;
+        //                 let tmp = pos;
+        //                 if (tmp === -1) tmp = 0;
+        //                 while (header.events[tmp] !== undefined) {
+        //                     tmp++;
+        //                 }
+        //                 pos = tmp;
                         
-                        let render = headerStart <= eventStart || index === 0;
-                        if(render === false){
-                            let previousHeader = resourceEvents.headerItems[index - 1];
-                            let previousHeaderStart = this.localeMoment(previousHeader.start), previousHeaderEnd = this.localeMoment(previousHeader.end);
-                            if(previousHeaderEnd <= eventStart || previousHeaderStart >= eventEnd)
-                                render = true;
-                        }
-                        header.events[pos] = this._createHeaderEvent(render, span, item);
-                    }
-                }
-            }
-        } else {
-            console.log('normal');
-            // let initRenderData = this._createInitRenderData(this.isEventPerspective, this.eventGroups, this.resources, this.headers);
-            initRenderData = this._createInitRenderData(this.isEventPerspective, this.eventGroups, this.resources, this.headers);
-            this.initRenderData = initRenderData;
-            //this.events.sort(this._compare);
-            this.events = uniqBy(this.events, e => e.id);
-            // this.events.forEach((item) => {
-            if(this.events && this.events.length) {
-                for(let i=0; i<this.events.length; i++){
-                    let item = this.events[i];
-                    let resourceEventsList = initRenderData.filter(x => x.slotId === this._getEventSlotId(item));
-                    if(resourceEventsList.length > 0) {
-                        let resourceEvents = resourceEventsList[0];
-                        let span = this._getSpan(item.start, item.end, this.headers);
-                        let eventStart = this.localeMoment(item.start), eventEnd = this.localeMoment(item.end);
-                        let pos = -1;
-                        // resourceEvents.headerItems.forEach((header, index) => {
-                        for(let k=0; k< resourceEvents.headerItems.length; k++){
-                            let header = resourceEvents.headerItems[k];
-                            let index = k;
-                            let headerStart = this.localeMoment(header.start), headerEnd = this.localeMoment(header.end);
-                            if(headerEnd > eventStart && headerStart < eventEnd) {
-                                header.count = header.count + 1;
+        //                 let render = headerStart <= eventStart || index === 0;
+        //                 if(render === false){
+        //                     let previousHeader = resourceEvents.headerItems[index - 1];
+        //                     let previousHeaderStart = this.localeMoment(previousHeader.start), previousHeaderEnd = this.localeMoment(previousHeader.end);
+        //                     if(previousHeaderEnd <= eventStart || previousHeaderStart >= eventEnd)
+        //                         render = true;
+        //                 }
+        //                 header.events[pos] = this._createHeaderEvent(render, span, item);
+        //             }
+        //         }
+        //     }
+        // } else {
+        //     console.log('normal');
+        let initRenderData = this._createInitRenderData(this.isEventPerspective, this.eventGroups, this.resources, this.headers);
+        initRenderData = this._createInitRenderData(this.isEventPerspective, this.eventGroups, this.resources, this.headers);
+        this.initRenderData = initRenderData;
+        //this.events.sort(this._compare);
+        this.events = uniqBy(this.events, e => e.id);
+        // this.events.forEach((item) => {
+        if(this.events && this.events.length) {
+            for(let i=0; i<this.events.length; i++){
+                let item = this.events[i];
+                let resourceEventsList = initRenderData.filter(x => x.slotId === this._getEventSlotId(item));
+                if(resourceEventsList.length > 0) {
+                    let resourceEvents = resourceEventsList[0];
+                    let span = this._getSpan(item.start, item.end, this.headers);
+                    let eventStart = this.localeMoment(item.start), eventEnd = this.localeMoment(item.end);
+                    let pos = -1;
+                    // resourceEvents.headerItems.forEach((header, index) => {
+                    let hoursTillStart = eventStart.hour();
+                    if(hoursTillStart > 0) hoursTillStart -= 1;
+                    const spansToIgnore = hoursTillStart * parseInt(60 / this.config.minuteStep);
+                    for(let k=spansToIgnore; k< resourceEvents.headerItems.length; k++){
+                        let header = resourceEvents.headerItems[k];
+                        let index = k;
+                        let headerStart = this.localeMoment(header.start), headerEnd = this.localeMoment(header.end);
+                        if(headerEnd > eventStart && headerStart < eventEnd) {
+                            header.count = header.count + 1;
 
-                                let tmp = pos;
-                                if (tmp === -1) tmp = 0;
-                                while (header.events[tmp] !== undefined) {
-                                    tmp++;
-                                }
-                                pos = tmp;
-                                
-                                let render = headerStart <= eventStart || index === 0;
-                                if(render === false){
-                                    let previousHeader = resourceEvents.headerItems[index - 1];
-                                    let previousHeaderStart = this.localeMoment(previousHeader.start), previousHeaderEnd = this.localeMoment(previousHeader.end);
-                                    if(previousHeaderEnd <= eventStart || previousHeaderStart >= eventEnd)
-                                        render = true;
-                                }
-                                header.events[pos] = this._createHeaderEvent(render, span, item);
+                            let tmp = pos;
+                            if (tmp === -1) tmp = 0;
+                            while (header.events[tmp] !== undefined) {
+                                tmp++;
                             }
+                            pos = tmp;
+                            
+                            let render = headerStart <= eventStart || index === 0;
+                            if(render === false){
+                                let previousHeader = resourceEvents.headerItems[index - 1];
+                                let previousHeaderStart = this.localeMoment(previousHeader.start), previousHeaderEnd = this.localeMoment(previousHeader.end);
+                                if(previousHeaderEnd <= eventStart || previousHeaderStart >= eventEnd)
+                                    render = true;
+                            }
+                            header.events[pos] = this._createHeaderEvent(render, span, item);
                         }
+                        if(headerStart > eventEnd) break;
                     }
                 }
             }
-            // });
         }
+            // });
+        // }
 
         // initRenderData.forEach((resourceEvents) => {
         for(let j=0; j < initRenderData.length; j++){

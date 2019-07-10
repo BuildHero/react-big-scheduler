@@ -191,81 +191,91 @@ class ResourceEvents extends Component {
         let selectedArea = isSelecting ? <SelectedArea {...this.props} left={left} width={width} /> : <div />;
 
         let eventList = [];
-        resourceEvents.headerItems.forEach((headerItem, index) => {
-            // for add more comment the following line
-            if(headerItem.addMore > 0) headerItem.addMore = 0;
-            if (headerItem.count > 0 || headerItem.summary != undefined) {
+        // resourceEvents.headerItems.forEach((headerItem, index) => {
+        if(resourceEvents.render){
+            for(let i=0;i<resourceEvents.headerItems.length;i++) {
+                let headerItem = resourceEvents.headerItems[i];
+                let index = i;
+                // for add more comment the following line
+                if(headerItem.addMore > 0) headerItem.addMore = 0;
+                if (headerItem.count > 0 || headerItem.summary != undefined) {
 
-                let isTop = config.summaryPos === SummaryPos.TopRight || config.summaryPos === SummaryPos.Top || config.summaryPos === SummaryPos.TopLeft;
-                let marginTop = resourceEvents.hasSummary && isTop ? 1 + config.eventItemLineHeight : 1;
-                // TRY TO DISABLE ADD MORE FROM HERE
+                    let isTop = config.summaryPos === SummaryPos.TopRight || config.summaryPos === SummaryPos.Top || config.summaryPos === SummaryPos.TopLeft;
+                    let marginTop = resourceEvents.hasSummary && isTop ? 1 + config.eventItemLineHeight : 1;
+                    // TRY TO DISABLE ADD MORE FROM HERE
+                    
+                    let renderEventsMaxIndex = headerItem.addMore === 0 ? cellMaxEvents : headerItem.addMoreIndex;
                 
-                let renderEventsMaxIndex = headerItem.addMore === 0 ? cellMaxEvents : headerItem.addMoreIndex;
-               
 
-                headerItem.events.forEach((evt, idx) => {
-                    // for add more uncomment the following line
-                    // if(idx < renderEventsMaxIndex && evt !== undefined && evt.render) {
-                    if(evt !== undefined && evt.render) {
-                        let durationStart = localeMoment(startDate);
-                        let durationEnd = localeMoment(endDate).add(1, 'days');
-                        if(cellUnit === CellUnits.Hour){
-                            durationStart = localeMoment(startDate).add(config.dayStartFrom, 'hours');
-                            durationEnd = localeMoment(endDate).add(config.dayStopTo + 1, 'hours');
+                    // headerItem.events.forEach((evt, idx) => {
+                    for(let j=0; j<headerItem.events.length; j++){
+                        let evt = headerItem.events[j];
+                        let idx = j;
+                        // for add more uncomment the following line
+                        // if(idx < renderEventsMaxIndex && evt !== undefined && evt.render) {
+                        if(evt !== undefined && evt.render) {
+                            let durationStart = localeMoment(startDate);
+                            let durationEnd = localeMoment(endDate).add(1, 'days');
+                            if(cellUnit === CellUnits.Hour){
+                                durationStart = localeMoment(startDate).add(config.dayStartFrom, 'hours');
+                                durationEnd = localeMoment(endDate).add(config.dayStopTo + 1, 'hours');
+                            }
+                            let eventStart = localeMoment(evt.eventItem.start);
+                            let eventEnd = localeMoment(evt.eventItem.end);
+                            let isStart = eventStart >= durationStart;
+                            let isEnd = eventEnd <= durationEnd;
+                            let left = index*cellWidth + (index > 0 ? 2 : 3);
+                            //also add mores
+                            // let width = (evt.span * cellWidth - (index > 0 ? 5 : 6)) > 0 ? (evt.span * cellWidth - (index > 0 ? 5 : 6)) : 0;
+                            let width =  evt.span * cellWidth - (index > 0 ? 5 : 6);
+                            let top = marginTop; // + idx*config.eventItemLineHeight;
+                            let eventItem = <DnDEventItem
+                                                    {...this.props}
+                                                    key={evt.eventItem.id}
+                                                    eventItem={evt.eventItem}
+                                                    isStart={isStart}
+                                                    isEnd={isEnd}
+                                                    isInPopover={false}
+                                                    left={left}
+                                                    width={width}
+                                                    top={top}
+                                                    leftIndex={index}
+                                                    rightIndex={index + evt.span}
+                                                    />
+                            eventList.push(eventItem);
                         }
-                        let eventStart = localeMoment(evt.eventItem.start);
-                        let eventEnd = localeMoment(evt.eventItem.end);
-                        let isStart = eventStart >= durationStart;
-                        let isEnd = eventEnd <= durationEnd;
-                        let left = index*cellWidth + (index > 0 ? 2 : 3);
-                        //also add mores
-                        // let width = (evt.span * cellWidth - (index > 0 ? 5 : 6)) > 0 ? (evt.span * cellWidth - (index > 0 ? 5 : 6)) : 0;
-                        let width =  evt.span * cellWidth - (index > 0 ? 5 : 6);
-                        let top = marginTop; // + idx*config.eventItemLineHeight;
-                        let eventItem = <DnDEventItem
-                                                   {...this.props}
-                                                   key={evt.eventItem.id}
-                                                   eventItem={evt.eventItem}
-                                                   isStart={isStart}
-                                                   isEnd={isEnd}
-                                                   isInPopover={false}
-                                                   left={left}
-                                                   width={width}
-                                                   top={top}
-                                                   leftIndex={index}
-                                                   rightIndex={index + evt.span}
-                                                   />
-                        eventList.push(eventItem);
+                        // });
                     }
-                });
 
-                if(headerItem.addMore > 0) {
-                    let left = index*cellWidth + (index > 0 ? 2 : 3);
-                    let width = cellWidth - (index > 0 ? 5 : 6);
-                    let top = marginTop + headerItem.addMoreIndex*config.eventItemLineHeight;
-                    let addMoreItem = <AddMore
-                                            {...this.props}
-                                            key={headerItem.time}
-                                            headerItem={headerItem}
-                                            number={headerItem.addMore}
-                                            left={left}
-                                            width={width}
-                                            top={top}
-                                            clickAction={this.onAddMoreClick}
-                                        />;
-                    eventList.push(addMoreItem);
-                }
+                    if(headerItem.addMore > 0) {
+                        let left = index*cellWidth + (index > 0 ? 2 : 3);
+                        let width = cellWidth - (index > 0 ? 5 : 6);
+                        let top = marginTop + headerItem.addMoreIndex*config.eventItemLineHeight;
+                        let addMoreItem = <AddMore
+                                                {...this.props}
+                                                key={headerItem.time}
+                                                headerItem={headerItem}
+                                                number={headerItem.addMore}
+                                                left={left}
+                                                width={width}
+                                                top={top}
+                                                clickAction={this.onAddMoreClick}
+                                            />;
+                        eventList.push(addMoreItem);
+                    }
 
-                if(headerItem.summary != undefined) {
-                    let top = isTop ? 1 : resourceEvents.rowHeight - config.eventItemLineHeight + 1;
-                    let left = index*cellWidth + (index > 0 ? 2 : 3);
-                    let width = cellWidth - (index > 0 ? 5 : 6);
-                    let key = `${resourceEvents.slotId}_${headerItem.time}`;
-                    let summary = <Summary key={key} schedulerData={schedulerData} summary={headerItem.summary} left={left} width={width} top={top} />;
-                    eventList.push(summary);
+                    if(headerItem.summary != undefined) {
+                        let top = isTop ? 1 : resourceEvents.rowHeight - config.eventItemLineHeight + 1;
+                        let left = index*cellWidth + (index > 0 ? 2 : 3);
+                        let width = cellWidth - (index > 0 ? 5 : 6);
+                        let key = `${resourceEvents.slotId}_${headerItem.time}`;
+                        let summary = <Summary key={key} schedulerData={schedulerData} summary={headerItem.summary} left={left} width={width} top={top} />;
+                        eventList.push(summary);
+                    }
                 }
             }
-        });
+        }
+        // });
         const res = schedulerData.resources.find(el => el.id === resourceEvents.slotId)
         const bgColor = res.off ? '#fafafa' : 'transparent';
         let rowHeight = res.off ? resourceEvents.rowHeight - 5 : resourceEvents.rowHeight;
