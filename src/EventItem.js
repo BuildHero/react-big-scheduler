@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {PropTypes} from 'prop-types'
 import Popover from 'antd/lib/popover'
 import 'antd/lib/popover/style/index.css'
-import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu';
 import EventItemPopover from './EventItemPopover'
 import {CellUnits, DATETIME_FORMAT} from './index'
 import {DnDTypes} from './DnDTypes'
@@ -21,6 +20,7 @@ class EventItem extends Component {
         this.startResizer = null;
         this.endResizer = null;
         this.hidePopover = false
+        this.mounted = false;
     }
 
     static propTypes = {
@@ -52,18 +52,29 @@ class EventItem extends Component {
     }
 
     componentWillReceiveProps(np) {
-        const {left, top, width, eventItem} = np;
-        this.setState({
-            left: left,
-            top: top,
-            width: width
-        });
+        const {left, top, width} = np;
+        if(this.mounted){
+            this.setState({
+                left: left,
+                top: top,
+                width: width
+            });
 
-        this.subscribeResizeEvent(np);
+            this.subscribeResizeEvent(np);
+        }
     }
 
     componentDidMount() {
+        this.mounted = true;
         this.subscribeResizeEvent(this.props);
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
+        if (this.startResizer) this.startResizer.removeEventListener('mousedown', this.initStartDrag, false);
+        if (this.endResizer) this.endResizer.removeEventListener('mousedown', this.initEndDrag, false);
+        document.documentElement.removeEventListener('mousemove', this.doStartDrag, false);
+        document.documentElement.removeEventListener('mouseup', this.stopStartDrag, false);
     }
 
     initStartDrag = (ev) => {
@@ -72,12 +83,14 @@ class EventItem extends Component {
 
         const {schedulerData} = this.props;
         schedulerData._startResizing();
-        this.setState({
-            startX: ev.clientX
-        });
+        if(this.mounted) {
+            this.setState({
+                startX: ev.clientX
+            });
 
-        document.documentElement.addEventListener('mousemove', this.doStartDrag, false);
-        document.documentElement.addEventListener('mouseup', this.stopStartDrag, false);
+            document.documentElement.addEventListener('mousemove', this.doStartDrag, false);
+            document.documentElement.addEventListener('mouseup', this.stopStartDrag, false);
+        }
         document.onselectstart = function () {
 			return false;
 		};
@@ -106,7 +119,7 @@ class EventItem extends Component {
             newLeft = 3;
         }
 
-        this.setState({left: newLeft, width: newWidth});
+        if(this.mounted) this.setState({left: newLeft, width: newWidth});
     }
 
     stopStartDrag = (ev) => {
@@ -214,12 +227,15 @@ class EventItem extends Component {
 
         const {schedulerData} = this.props;
         schedulerData._startResizing();
-        this.setState({
-            endX: ev.clientX
-        });
+        if(this.mounted) {
+            this.setState({
+                endX: ev.clientX
+            });
 
-        document.documentElement.addEventListener('mousemove', this.doEndDrag, false);
-        document.documentElement.addEventListener('mouseup', this.stopEndDrag, false);
+            document.documentElement.addEventListener('mousemove', this.doEndDrag, false);
+            document.documentElement.addEventListener('mouseup', this.stopEndDrag, false);
+        }
+
         document.onselectstart = function () {
 			return false;
 		};
@@ -243,8 +259,9 @@ class EventItem extends Component {
             newWidth = minWidth;
         else if (newWidth > maxWidth)
             newWidth = maxWidth;
-
-        this.setState({width: newWidth});
+        if(this.mounted) {
+            this.setState({width: newWidth});
+        }
     }
 
     stopEndDrag = (ev) => {
@@ -388,21 +405,7 @@ class EventItem extends Component {
         
 
         let eventItemContextMenu = (
-            <ContextMenu 
-                id="eventitem_identifier"
-                onShow={() => {
-                    this.setState({hidePopover: true});
-                }}
-                onHide={() => {
-                    this.setState({hidePopover: false});
-                }}
-            >
-                <MenuItem>Copy</MenuItem>
-                <MenuItem divider />
-                <MenuItem>
-                Remove tech from visit
-                </MenuItem>
-            </ContextMenu>
+            <div />
         );
         if(eventItemContextMenuResolver !== undefined) {
             const contextmenu = eventItemContextMenuResolver(schedulerData, eventItem);
@@ -414,32 +417,7 @@ class EventItem extends Component {
             }
             const {menuItems} = contextmenu;
             eventItemContextMenu = (
-                <ContextMenu 
-                    id="eventitem_identifier"
-                    onShow={e=>{
-                        if(onShow) onShow();
-                        this.setState({hidePopover: true});
-                    }}
-                    onHide={e=>{
-
-                        if(onHide) onHide();
-                        this.setState({hidePopover: false});
-                    }}
-                    {...props}
-                >
-                {
-                    menuItems.map(menuItem => {
-                        const submenus = menuItems.submenus;
-                        const menuItemProps = {...menuItem};
-                        delete menuItemProps.label
-                        return (
-                            <MenuItem key={menuItemProps.id} {...menuItemProps}>
-                                {menuItem.label}
-                            </MenuItem>
-                        );
-                    })
-                }
-                </ContextMenu>
+                <div />
             );
                 
 

@@ -11,7 +11,7 @@ import ResourceItem from './ResourceItem'
 import ResourceList from './ResourceList'
 import Nav from './Nav'
 import ViewSrcCode from './ViewSrcCode'
-import withDragDropContext from './withDnDContext'
+// import withDragDropContext from './withDnDContext'
 
 class DragAndDrop extends Component{
     constructor(props){
@@ -199,4 +199,4 @@ class DragAndDrop extends Component{
     }
 }
 
-export default withDragDropContext(DragAndDrop)
+export default DragAndDrop

@@ -82,7 +82,7 @@ class Scheduler extends Component {
             scrollLeft: 0,
             scrollTop: 0,
             documentWidth: document.documentElement.clientWidth,
-            documentHeight: document.documentElement.clientHeight,
+            documentHeight: document.documentElement.clientHeight
         };
 
         if(schedulerData.isSchedulerResponsive())
@@ -161,7 +161,8 @@ class Scheduler extends Component {
 
     render() {
         const { schedulerData, leftCustomHeader, rightCustomHeader } = this.props;
-        const { renderData, viewType, showAgenda, isEventPerspective, config, localeMoment } = schedulerData;
+        let { renderData } = schedulerData;
+        const { viewType, showAgenda, isEventPerspective, config, localeMoment } = schedulerData;
         const width = schedulerData.getSchedulerWidth();
         const calendarPopoverEnabled = config.calendarPopoverEnabled;
 
@@ -186,15 +187,16 @@ class Scheduler extends Component {
             let DndResourceEvents = this.state.dndContext.getDropTarget();
             let eventDndSource = this.state.dndContext.getDndSource();
 
-            let resourceEventsList = renderData.map((item) => {
+            let resourceEventsList = renderData.map(item => {
                 return <DndResourceEvents
-                                {...this.props}
-                                key={item.slotId}
-                                resourceEvents={item}
-                                dndSource={eventDndSource}
+                            {...this.props}
+                            key={item.slotId}
+                            resourceEvents={item}
+                            dndSource={eventDndSource}
                 />
             });
-
+            renderData = [];
+            // let resourceEventsList = this.state.resourceEventsList;
             let contentScrollbarHeight = this.state.contentScrollbarHeight,
                 contentScrollbarWidth = this.state.contentScrollbarWidth,
                 resourceScrollbarHeight = this.state.resourceScrollbarHeight,

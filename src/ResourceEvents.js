@@ -52,6 +52,12 @@ class ResourceEvents extends Component {
             this.eventContainer.addEventListener('mousedown', this.initDrag, false);
     }
 
+    componentWillUnmount() {
+        this.eventContainer.removeEventListener('mousedown', this.initDrag, false);
+        document.documentElement.removeEventListener('mousemove', this.doDrag, false);
+        document.documentElement.removeEventListener('mouseup', this.stopDrag, false);
+    }
+
     initDrag = (ev) => {
         ev.stopPropagation();
         if(ev.buttons !== undefined && ev.buttons !== 1) return;

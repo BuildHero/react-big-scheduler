@@ -7,7 +7,9 @@ import Scheduler, {SchedulerData, ViewTypes, DATE_FORMAT, DemoData} from '../src
 import Nav from './Nav'
 import Tips from './Tips'
 import ViewSrcCode from './ViewSrcCode'
-import withDragDropContext from './withDnDContext'
+// import withDnDContext from './withDnDContext'
+import {DndProvider} from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 import './test.css';
 
 class Basic extends Component{
@@ -246,4 +248,4 @@ class Basic extends Component{
     }
 }
 
-export default withDragDropContext(Basic)
+export default Basic;
