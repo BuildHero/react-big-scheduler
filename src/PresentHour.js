@@ -55,7 +55,7 @@ class PresentHour extends Component {
         if(shouldDisplay) {
           return (
             <div style={{display: 'flex', flexFlow: 'column', float: 'right', height: '100%', width: '100%'}}>
-            <div style={{position:'relative',color: 'white',width: '51px',height: '17px',borderRadius: '6px',backgroundColor: 'rgb(23, 41, 77)',fontSize: '10px',padding: '2px 10px',marginLeft: `calc(${this.state.presentTimeLocation}px - 25px)`,zIndex: 2}}>
+            <div style={{position:'relative',color: 'white',width: '51px',height: '17px',borderRadius: '6px',backgroundColor: `${color}`,fontSize: '10px',padding: '2px 10px',marginLeft: `calc(${this.state.presentTimeLocation}px - 25px)`,zIndex: 2}}>
               {this.state.hour}
             </div>
             {this.props.children}

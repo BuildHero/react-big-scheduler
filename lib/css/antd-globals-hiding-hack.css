@@ -148,10 +148,6 @@
   transition: color 0.3s;
   -webkit-text-decoration-skip: objects;
 }
-#RBS-Scheduler-root a:focus {
-  text-decoration: underline;
-  text-decoration-skip-ink: auto;
-}
 #RBS-Scheduler-root a:hover {
   color: #40a9ff;
 }
@@ -322,14 +318,15 @@
 }
 #RBS-Scheduler-root .clearfix::before,
 #RBS-Scheduler-root .clearfix::after {
-  content: '';
   display: table;
+  content: '';
 }
 #RBS-Scheduler-root .clearfix::after {
   clear: both;
 }
 #RBS-Scheduler-root .anticon {
   display: inline-block;
+  color: inherit;
   font-style: normal;
   line-height: 0;
   text-align: center;
@@ -628,29 +625,30 @@
 #RBS-Scheduler-root [ant-click-animating-without-extra-node='true'] {
   position: relative;
 }
+#RBS-Scheduler-root html {
+  --antd-wave-shadow-color: #1890ff;
+}
 #RBS-Scheduler-root [ant-click-animating-without-extra-node='true']::after,
 #RBS-Scheduler-root .ant-click-animating-node {
   position: absolute;
-  top: -1px;
-  right: -1px;
-  bottom: -1px;
-  left: -1px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: block;
-  border: 0 solid #1890ff;
   border-radius: inherit;
+  box-shadow: 0 0 0 0 #1890ff;
+  box-shadow: 0 0 0 0 var(--antd-wave-shadow-color);
   opacity: 0.2;
   animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1), waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
   animation-fill-mode: forwards;
-  pointer-events: none;
   content: '';
+  pointer-events: none;
 }
 @keyframes waveEffect {
   100% {
-    top: -6px;
-    right: -6px;
-    bottom: -6px;
-    left: -6px;
-    border-width: 6px;
+    box-shadow: 0 0 0 #1890ff;
+    box-shadow: 0 0 0 6px var(--antd-wave-shadow-color);
   }
 }
 @keyframes fadeEffect {
@@ -1235,9 +1233,13 @@
     opacity: 0;
   }
 }
-#RBS-Scheduler-root .ant-motion-collapse {
+#RBS-Scheduler-root .ant-motion-collapse-legacy {
   overflow: hidden;
 }
-#RBS-Scheduler-root .ant-motion-collapse-active {
+#RBS-Scheduler-root .ant-motion-collapse-legacy-active {
+  transition: height 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+}
+#RBS-Scheduler-root .ant-motion-collapse {
+  overflow: hidden;
   transition: height 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
 }

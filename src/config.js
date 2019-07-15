@@ -68,7 +68,9 @@ export default {
 
     minuteStep: 30,
     showPresentTime: true,
-    presentTimeColor: '#2dce89',
+    // presentTimeColor: '#2dce89',
+    presentTimeColor: '#17294d',
+    processingMessage: 'Processing...',
 
     views: [
         {viewName: 'Day', viewType: ViewTypes.Day, showAgenda: false, isEventPerspective: false},

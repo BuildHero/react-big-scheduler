@@ -7,9 +7,6 @@ import Scheduler, {SchedulerData, ViewTypes, DATE_FORMAT, DemoData} from '../src
 import Nav from './Nav'
 import Tips from './Tips'
 import ViewSrcCode from './ViewSrcCode'
-// import withDnDContext from './withDnDContext'
-import {DndProvider} from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 import './test.css';
 
 class Basic extends Component{
@@ -78,7 +75,7 @@ class Basic extends Component{
             label: "Copy",
             onClick: data => {
                 console.log(data);
-                alert('Copy clicked')
+                // alert('Copy clicked')
             },
             data: eventItem
         });
@@ -90,7 +87,7 @@ class Basic extends Component{
             id: "option2",
             label: "Remove tech",
             onClick: eventItem => {
-                alert(`Remove tech clicked ${eventItem.resourceId}`)
+                // alert(`Remove tech clicked ${eventItem.resourceId}`)
             },
             data: eventItem
         });
@@ -189,30 +186,39 @@ class Basic extends Component{
     }
 
     updateEventStart = (schedulerData, event, newStart) => {
-        if(confirm(`Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`)) {
+        // if(confirm(`Do you want to adjust the start of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newStart: ${newStart}}`)) {
             schedulerData.updateEventStart(event, newStart);
-        }
+        // }
         this.setState({
             viewModel: schedulerData
         })
     }
 
     updateEventEnd = (schedulerData, event, newEnd) => {
-        if(confirm(`Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`)) {
+        // if(confirm(`Do you want to adjust the end of the event? {eventId: ${event.id}, eventTitle: ${event.title}, newEnd: ${newEnd}}`)) {
             schedulerData.updateEventEnd(event, newEnd);
-        }
+        // }
         this.setState({
             viewModel: schedulerData
         })
     }
 
     moveEvent = (schedulerData, event, slotId, slotName, start, end) => {
-        if(confirm(`Do you want to move the event? {eventId: ${event.id}, eventTitle: ${event.title}, newSlotId: ${slotId}, newSlotName: ${slotName}, newStart: ${start}, newEnd: ${end}`)) {
-            schedulerData.moveEvent(event, slotId, slotName, start, end);
+        // if(confirm(`Do you want to move the event? {eventId: ${event.id}, eventTitle: ${event.title}, newSlotId: ${slotId}, newSlotName: ${slotName}, newStart: ${start}, newEnd: ${end}`)) {
+            console.log('moveEvent');
+            schedulerData.processing = true;
             this.setState({
                 viewModel: schedulerData
             })
-        }
+            setTimeout(() => {
+                schedulerData.moveEvent(event, slotId, slotName, start, end);
+                schedulerData.processing = false;
+                this.setState({
+                    viewModel: schedulerData
+                })
+            }, 1000);
+            
+        // }
     }
 
     onScrollRight = (schedulerData, schedulerContent, maxScrollLeft) => {

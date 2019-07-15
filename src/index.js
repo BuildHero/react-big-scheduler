@@ -321,20 +321,41 @@ class Scheduler extends Component {
                 );
             }
         }
-
+        let processingTag = schedulerData.processing 
+            ? (<div style={{
+                    width: '100%',
+                    height: '100%',
+                    zIndex: 1000,
+                    textAlign: 'center',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    fontSize: '20px',
+                    color: 'white',
+                    opacity: '0.5',
+                    backgroundColor: 'white'
+                    }}>
+                <div style={{color: `${config.presentTimeColor}`, marginTop: `${config.schedulerMaxHeight/2+50}px`, zIndex: 1001}}>{config.processingMessage}</div> 
+               </div>) 
+            : '';
         return (
-            <table id="RBS-Scheduler-root" className="scheduler" style={{width: `${width}px`}}>
-                <thead>
-                <tr>
-                    <td colSpan="2">
-                        {schedulerHeader}
-                    </td>
-                </tr>
-                </thead>
-                <tbody>
-                {tbodyContent}
-                </tbody>
-            </table>
+            <div  style={{position: 'relative'}}>
+                {processingTag}
+                <div>
+                    <table id="RBS-Scheduler-root" className="scheduler" style={{width: `${width}px`}}>
+                        <thead>
+                        <tr>
+                            <td colSpan="2">
+                                {schedulerHeader}
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {tbodyContent}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             
         )
     }
