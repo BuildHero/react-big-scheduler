@@ -111,6 +111,7 @@ class Scheduler extends Component {
         leftCustomHeader: PropTypes.object,
         rightCustomHeader: PropTypes.object,
         newEvent: PropTypes.func,
+        rightClickEvent: PropTypes.func,
         subtitleGetter: PropTypes.func,
         eventItemClick: PropTypes.func,
         viewEventClick: PropTypes.func,

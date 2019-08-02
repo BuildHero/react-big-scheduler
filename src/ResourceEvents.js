@@ -43,19 +43,93 @@ class ResourceEvents extends Component {
         const {config} = schedulerData;
         if(config.creatable === true) {
             this.eventContainer.addEventListener('mousedown', this.initDrag, false);
+            this.eventContainer.addEventListener('contextmenu', this.initContextMenu, false);
         }
     }
 
     componentWillReceiveProps(np) {
         this.eventContainer.removeEventListener('mousedown', this.initDrag, false);
+        this.eventContainer.removeEventListener('contextmenu', this.initContextMenu, false);
         if(np.schedulerData.config.creatable)
             this.eventContainer.addEventListener('mousedown', this.initDrag, false);
+            this.eventContainer.addEventListener('contextmenu', this.initContextMenu, false);
     }
 
     componentWillUnmount() {
         this.eventContainer.removeEventListener('mousedown', this.initDrag, false);
+        this.eventContainer.removeEventListener('contextmenu', this.initContextMenu, false);
         document.documentElement.removeEventListener('mousemove', this.doDrag, false);
         document.documentElement.removeEventListener('mouseup', this.stopDrag, false);
+    }
+
+    initContextMenu = (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        // if(ev.buttons !== undefined && ev.buttons !== 1) return;
+        // if((ev.srcElement || ev.target) !== this.eventContainer) return;
+
+        const {schedulerData, rightClickEvent, resourceEvents} = this.props;
+        const {headers, events, config, cellUnit, localeMoment} = schedulerData;
+        let cellWidth = schedulerData.getContentCellWidth();
+        let pos = getPos(this.eventContainer);
+        let startX = ev.clientX - pos.x;
+        let startY = ev.clientY - pos.y;
+        let leftIndex = Math.floor(startX/cellWidth);
+        let left = leftIndex*cellWidth;
+        let rightIndex = Math.ceil(startX/cellWidth);
+        let width = (rightIndex - leftIndex)*cellWidth;
+
+        let startTime = headers[leftIndex].time;
+        let endTime = resourceEvents.headerItems[rightIndex - 1].end;
+        if(cellUnit !== CellUnits.Hour)
+            endTime = localeMoment(resourceEvents.headerItems[rightIndex - 1].start).hour(23).minute(59).second(59).format(DATETIME_FORMAT);
+        let slotId = resourceEvents.slotId;
+        let slotName = resourceEvents.slotName;
+
+        this.setState({
+            startX: 0,
+            leftIndex: 0,
+            left: 0,
+            rightIndex: 0,
+            // width: 0,
+            isSelecting: false
+        });
+
+        let hasConflict = false;
+        if(config.checkConflict){
+            let start = localeMoment(startTime),
+                end = localeMoment(endTime);
+
+            events.forEach((e) =>{
+                if(schedulerData._getEventSlotId(e) === slotId) {
+                    let eStart = localeMoment(e.start),
+                        eEnd = localeMoment(e.end);
+                    if((start >= eStart && start < eEnd) || (end > eStart && end <= eEnd) || (eStart >= start && eStart < end) || (eEnd > start && eEnd <= end))
+                        hasConflict = true;
+                }
+            });
+        }
+
+        if(hasConflict) {
+            const {conflictOccurred} = this.props;
+            if(conflictOccurred != undefined){
+                conflictOccurred(schedulerData, 'New', {
+                    id: undefined,
+                    start: startTime,
+                    end: endTime,
+                    slotId: slotId,
+                    slotName: slotName,
+                    title: undefined,
+                }, DnDTypes.EVENT, slotId, slotName, startTime, endTime);
+            }
+            else {
+                console.log('Conflict occurred, set conflictOccurred func in Scheduler to handle it');
+            }
+        }
+        else {
+            if(rightClickEvent != undefined)
+                rightClickEvent(schedulerData, slotId, slotName, startTime, endTime,ev.clientX,ev.clientY);
+        }
     }
 
     initDrag = (ev) => {
