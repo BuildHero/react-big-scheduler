@@ -1,6 +1,6 @@
 {
     "name": "react-big-scheduler",
-    "version": "0.3.0",
+    "version": "0.3.0-peer",
     "description": "A scheduler and resource planning component built for React and made for modern browsers (IE10+)",
     "keywords": [
         "scheduler",
@@ -44,11 +44,15 @@
         "antd": "^3.9.0",
         "moment": "^2.18.1",
         "prop-types": "^15.6.1",
-        "react": "^16.0.0",
-        "react-dom": "^16.3.1",
         "rrule": "^2.2.9"
     },
+    "peerDependencies": {
+        "react": "*",
+        "react-dom": "*"
+    },
     "devDependencies": {
+        "react": "^16.0.0",
+        "react-dom": "^16.3.1",
         "babel": "6.23.0",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.0",
